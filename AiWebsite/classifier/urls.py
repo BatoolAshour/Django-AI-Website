@@ -1,7 +1,10 @@
 from django.urls import path
-from . import views
-
+from .views import ClassifyImageView, PredictionHistoryView
+ 
+app_name = "classifier"
+ 
 urlpatterns = [
-    path('', views.classify_image, name='classify'),
-    path('history/', views.prediction_history, name='history'),
+    path('', ClassifyImageView.as_view(), name='classify'),
+    path('history/', PredictionHistoryView.as_view(), name='history'),
 ]
+ 
