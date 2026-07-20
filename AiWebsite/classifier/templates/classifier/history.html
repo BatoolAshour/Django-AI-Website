@@ -65,7 +65,7 @@
         </tr>
         {% for r in results %}
         <tr>
-            <td><img src="{{ r.image.image.url }}" width="80" height="80" style="object-fit:cover;"></td>
+            <td><img src="{{ r.image.url }}" width="80" height="80" style="object-fit:cover;"></td>
             <td class="{% if r.label == 'AI-Generated' %}ai{% else %}real{% endif %}">
                 {{ r.label }}
             </td>

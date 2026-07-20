@@ -5,7 +5,7 @@ from django.apps import apps
 from django.urls import reverse_lazy
 from django.views.generic import FormView, ListView
 from .forms import ImageForm
-from .models import UploadedImage, PredictionResult
+from .models import PredictionResult
  
 CLASS_NAMES = ['AI-Generated', 'Real']  # index 0, 1 — matches training
  
@@ -50,9 +50,9 @@ class ClassifyImageView(FormView):
     success_url = reverse_lazy("classifier:history")
  
     def form_valid(self, form):
-        uploaded = form.save()
+        instance = form.save(commit=False)
  
-        img = PILImage.open(uploaded.image.path).convert('RGB')
+        img = PILImage.open(self.request.FILES['image']).convert('RGB')
         img_tensor = transform(img).unsqueeze(0)
  
         config = apps.get_app_config('classifier')
@@ -67,11 +67,10 @@ class ClassifyImageView(FormView):
         label = CLASS_NAMES[pred_idx.item()]
         confidence_val = confidence.item()
  
-        PredictionResult.objects.create(
-            image=uploaded,
-            label=label,
-            confidence=confidence_val
-        )
+        instance.label = label
+        instance.confidence = confidence_val
+        instance.save()
+ 
         return super(ClassifyImageView, self).form_valid(form)
  
     def form_invalid(self, form):
@@ -85,4 +84,4 @@ class PredictionHistoryView(ListView):
     ordering = ['-created_at']
  
     def get_queryset(self):
-        return PredictionResult.objects.select_related('image').order_by('-created_at')
+        return PredictionResult.objects.order_by('-created_at')

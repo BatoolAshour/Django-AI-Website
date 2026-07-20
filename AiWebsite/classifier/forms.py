@@ -1,8 +1,8 @@
 from django.forms import ModelForm
-from .models import UploadedImage
- 
- 
+from .models import PredictionResult
+
+
 class ImageForm(ModelForm):
     class Meta:
-        model = UploadedImage
+        model = PredictionResult
         fields = ['image']
