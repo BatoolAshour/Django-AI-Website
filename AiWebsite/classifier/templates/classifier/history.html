@@ -6,7 +6,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            max-width: 800px;
+            max-width: 900px;
             margin: 40px auto;
             background: #f4f4f4;
         }
@@ -41,6 +41,19 @@
             color: #16a34a;
             font-weight: bold;
         }
+        .pending {
+            color: #ca8a04;
+            font-weight: bold;
+        }
+        .failed {
+            color: #6b7280;
+            font-weight: bold;
+        }
+        .caption-text {
+            font-style: italic;
+            color: #555;
+            font-size: 0.9em;
+        }
         a {
             display: block;
             text-align: center;
@@ -55,30 +68,37 @@
 </head>
 <body>
     <h1>Prediction History</h1>
-
     <table>
         <tr>
             <th>Image</th>
             <th>Label</th>
             <th>Confidence</th>
+            <th>Status</th>
+            <th>Caption</th>
             <th>Date</th>
         </tr>
         {% for r in results %}
+        {% with latest_status=r.statuses.last %}
         <tr>
             <td><img src="{{ r.image.url }}" width="80" height="80" style="object-fit:cover;"></td>
             <td class="{% if r.label == 'AI-Generated' %}ai{% else %}real{% endif %}">
-                {{ r.label }}
+                {{ r.label|default:"—" }}
             </td>
-            <td>{{ r.confidence|floatformat:2 }}</td>
+            <td>{{ r.confidence|floatformat:2|default:"—" }}</td>
+            <td class="{% if latest_status.status == 'failed' %}failed{% elif latest_status.status == 'pending' %}pending{% elif latest_status.status == 'finished_ai' %}ai{% else %}real{% endif %}">
+                {{ latest_status.get_status_display }}
+            </td>
+            <td class="caption-text">{{ latest_status.caption|default:"—" }}</td>
             <td>{{ r.created_at|date:"M d, Y H:i" }}</td>
         </tr>
+        {% endwith %}
         {% empty %}
         <tr>
-            <td colspan="4">No predictions yet.</td>
+            <td colspan="6">No predictions yet.</td>
         </tr>
         {% endfor %}
     </table>
-
     <a href="{% url 'classifier:classify' %}">← Upload New Image</a>
 </body>
 </html>
+ 
