@@ -14,13 +14,13 @@ class ClassifierConfig(AppConfig):
     caption_model = None
  
     def ready(self):
-        from .dl_model.architecture import SimpleCNN
+        from .dl_model.architecture import build_model
         from transformers import BlipProcessor, BlipForConditionalGeneration
  
         ClassifierConfig.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
  
-        # AI-vs-Real classification model
-        model = SimpleCNN(num_classes=2)
+        # AI-vs-Real classification model (ResNet18-based)
+        model = build_model(num_classes=2)
         model_path = os.path.join(settings.BASE_DIR, 'classifier', 'dl_model', 'best_model.pth')
         model.load_state_dict(torch.load(model_path, map_location=ClassifierConfig.device))
         model.to(ClassifierConfig.device)
