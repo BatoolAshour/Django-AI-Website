@@ -9,7 +9,7 @@ from .models import PredictionResult, ResultStatus
  
 CLASS_NAMES = ['AI-Generated', 'Real']  
  
-transform = transforms.Compose([
+transform = transforms.Compose([ # Resize the image, convert it to tensor so the model understand it.
     transforms.Resize((224, 224)),
     transforms.ToTensor(),
     transforms.Normalize(mean=[0.485, 0.456, 0.406],
@@ -22,7 +22,7 @@ class ClassifyImageView(FormView):
     form_class = ImageForm
     success_url = reverse_lazy("classifier:history")
  
-    def form_valid(self, form):
+    def form_valid(self, form): # preprocessing, running both models, saving results.
         instance = form.save()
         ResultStatus.objects.create(result=instance, status='pending')
  
@@ -66,11 +66,11 @@ class ClassifyImageView(FormView):
  
         return super(ClassifyImageView, self).form_valid(form)
  
-    def form_invalid(self, form):
+    def form_invalid(self, form): #handles bad form submissions
         return super(ClassifyImageView, self).form_invalid(form)
  
  
-class PredictionHistoryView(ListView):
+class PredictionHistoryView(ListView): #shows all past predictions
     model = PredictionResult
     template_name = "classifier/history.html"
     context_object_name = "results"
