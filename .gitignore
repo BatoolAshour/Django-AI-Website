@@ -2,6 +2,6 @@
 __pycache__/
 *.pyc
 db.sqlite3
-best_model.pth
+classifier/dl_model/best_model.pth
 AiWebsite/media/uploads/*
 !AiWebsite/media/uploads/.gitkeep
