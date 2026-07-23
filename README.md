@@ -51,13 +51,14 @@ Each status entry can also hold an optional `caption`.
 
 ---
 ## ⚙️ How It Works
-
+ 
 1. User uploads an image
 2. A `PredictionResult` record is created
 3. A `ResultStatus` is created with status `pending`
 4. CNN model processes the image → predicts label + confidence
-5. `PredictionResult` is updated with `label` and `confidence`
-6. `ResultStatus` is updated to `finished_ai`, `finished_real`, or `failed`
+5. BLIP model generates a caption describing the image
+6. `PredictionResult` is updated with `label` and `confidence`
+7. `ResultStatus` is updated to `finished_ai` or `finished_real`, along with the generated `caption` (or `failed` if an error occurs)
 
 ---
 ## 📦 Installation
