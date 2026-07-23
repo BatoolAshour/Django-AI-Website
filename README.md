@@ -14,13 +14,15 @@ A Django web app that uses a trained CNN model to detect whether an uploaded ima
 ---
 
 ## 🏗️ Tech Stack
-
+ 
 | Layer | Tech |
 |---|---|
 | Backend | Django |
-| ML Model | CNN (trained on large real vs AI image dataset) |
+| Classification Model | CNN (PyTorch, trained on large real vs AI image dataset) |
+| Captioning Model | BLIP (image captioning) |
 | Database | Django ORM (SQLite/PostgreSQL) |
 | Media Storage | Django `ImageField` |
+ 
 ---
 
 ## 🗃️ Database Models
@@ -72,10 +74,9 @@ python manage.py runserver
 
 ## 🖼️ Usage
 
-1. Go to the homepage
-2. Upload an image
-3. Wait for processing
-4. View the result: **Real** or **AI-Generated**, along with confidence %
+1. Upload an image
+2. Wait for processing
+3. View the result: **Real** or **AI-Generated**, along with confidence %
 
 ---
 
